@@ -15,6 +15,12 @@ app.use(cors({
 })); // Enable CORS if needed
 app.use(express.json());
 console.log("online");
+
+// Make sure uploads directory exists
+if (!fs.existsSync("./uploads/")) {
+    fs.mkdirSync("./uploads/", { recursive: true });
+}
+
 // Configure Multer storage
 const storage = multer.diskStorage({
     destination: "./uploads/", // Folder where files will be stored
@@ -75,9 +81,9 @@ app.post("/transcribe", upload.single("file"), async (req, res) => {
       res.status(500).json({ error: error.response?.data || error.message });
     }
   });
-// Start server
-const PORT = process.env.PORT ||5000;
-app.listen(PORT, '0.0.0.0',() => {
-    console.log(`Server running on http://localhost:${PORT}`);
 
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
 });
